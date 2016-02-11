@@ -24,9 +24,11 @@ public class Lexer {
             //throw `invalid token` error
         }
         else if (current_state == SFINAL_LPAREN) {
+            current_char = reader.read();
             return new Token(LPAREN);
         }
         else if (current_state == SFINAL_RPAREN) {
+            current_char = reader.read();
             return new Token(RPAREN);
         }
         else if (current_state == SFINAL_INTEGER) {
@@ -36,11 +38,24 @@ public class Lexer {
             return new Token(FLOAT, Double.parseDouble(current_token.toString()));
         }
         else if (current_state == SFINAL_STRING) {
-            current_char = reader.read();
+            //the semantic value is currently:
+            // <quote>contents
+            //so delete that first character "
+            current_token.deleteCharAt(0);
+            current_char = reader.read(); //prepare for reading the next token
             return new Token(STRING, current_token.toString());
         }
         else if (current_state == SFINAL_ID) {
-            //
+            //deal with special cases
+            String idesque = current_token.toString();
+            if (idesque.equals("def")) return new Token(DEF);
+            if (idesque.equals("if")) return new Token(IF);
+            if (idesque.equals("lambda")) return new Token(LAMBDA);
+            if (idesque.equals("and")) return new Token(AND);
+            if (idesque.equals("or")) return new Token(OR);
+            if (idesque.equals("True")) return new Token(BOOLEAN, true);
+            if (idesque.equals("False")) return new Token(BOOLEAN, false);
+            return new Token(ID, idesque);
         }
         else {
             //throw error
