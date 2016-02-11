@@ -7,15 +7,35 @@ public class Lexer {
     private State current_state;
     private String current_token;
 
-    private State transition(typechar c) {
+    private State transition(Typechar c) {
         return table_f[current_state][c];
     }
 
     private Token lex_token() { 
+        current_token = new StringBuilder(); //will add each char to build up
+        current_state = transition(classify(current_char));
+        while (!is_final_state(current_state)) {
+            current_token.append(current_char);
+            current_char = reader.read();
+            current_state = transition(classify(current_char));
+        }
+        if (current_state == SFINAL_ERROR) {
+            //throw `invalid token` error
+        }
     }
 
     private boolean is_final_state(State s) {
         return s > SFINAL;
+    }
+    private Typechar classify(char c) {
+        if c == '"' return TC_QUOTE;
+        if c == '(' return TC_LPAREN;
+        if c == ')' return TC_RPAREN;
+        if c == '.' return TC_DOT;
+        if c == '-' return TC_HYPHEN;
+        if Character.isDigit(c) return TC_DIGIT;
+        if Character.isLetter(c) return TC_IDSTART;
+        if (c == '+' || c == '-' || c == '*' || c == '/') return TC_IDSTART;
     }
     private enum State {
         S_INITIAL,
@@ -29,7 +49,18 @@ public class Lexer {
         SFINAL_ID,
         SFINAL_INTEGER,
         SFINAL_FLOAT,
-        SFINAL_STRING
+        SFINAL_STRING,
+        SFINAL_ERROR
+    }
+    private enum Typechar {
+        TC_QUOTE,
+        TC_LPAREN,
+        TC_RPAREN,
+        TC_DOT,
+        TC_HYPHEN,
+        TC_DIGIT,
+        TC_IDSTART,
+        TC_OTHER
     }
     public Lexer() {
         //initialize the finite state machine
@@ -79,6 +110,7 @@ public class Lexer {
         table_f[S_ID][TC_OTHER] = SFINAL_ID;
     }
     public Token next_token() {
+        current_state = S_INITIAL;
         return lex_token();
     }
 }
