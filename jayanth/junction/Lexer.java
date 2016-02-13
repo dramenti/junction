@@ -158,6 +158,7 @@ public class Lexer {
         table_f[State.S_ID.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ID;
     }
     public Token next_token() throws IOException {
+        if (Character.getNumericValue(current_char) == -1) return new Token(TokenType.EOF);
         current_state = State.S_INITIAL;
         return lex_token();
     }
