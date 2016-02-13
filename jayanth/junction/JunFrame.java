@@ -1,4 +1,5 @@
 package jayanth.junction;
+import java.util.Map;
 
 public class JunFrame {
     private JunFrame parent; //null for global
@@ -22,7 +23,7 @@ public class JunFrame {
         JunObject value;
         JunFrame frame = this;
         while (frame != null) {
-            value = frame.getSymbolTable.get(name);
+            value = frame.getSymbolTable().get(name);
             if (value != null) return value;
             frame = frame.getParent();
         }

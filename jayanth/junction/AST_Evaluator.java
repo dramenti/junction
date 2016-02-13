@@ -9,6 +9,8 @@ public class AST_Evaluator implements AST_Visitor {
         //for each arg of the function, get the JunObject of the node's
         //next one
         JunFrame next_frame = new JunFrame(function.getParentFrame()); 
+
+        //bind formal parameters in new frame
         for (int i = 0; i < function.getArgCount(); i++) {
             AST_Node arg = node.getIthArgumentNode(i);
             JunObject parameter = arg.accept(this, frame);
@@ -25,6 +27,9 @@ public class AST_Evaluator implements AST_Visitor {
         return function;
     }
     JunObject visit(LambdaNode node, JunFrame frame) {
+        //do the same thing as a DefNode, except
+        Function lambda = new Function("Lambda", node.getFormals(), frame, node.getBodyNode());
+        return lambda;
     }
     JunObject visit(BooleanNode node, JunFrame frame);
     JunObject visit(IdentifierNode node, JunFrame frame) {

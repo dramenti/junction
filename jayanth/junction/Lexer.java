@@ -52,7 +52,7 @@ public class Lexer {
             String idesque = current_token.toString();
             if (idesque.equals("def")) return new Token(TokenType.DEF);
             if (idesque.equals("if")) return new Token(TokenType.IF);
-            if (idesque.equals("lambda")) return new Token(TokenType.LAMBDA);
+            if (idesque.equals("lambda") || idesque.equals("λ")) return new Token(TokenType.LAMBDA);
             if (idesque.equals("and")) return new Token(TokenType.AND);
             if (idesque.equals("or")) return new Token(TokenType.OR);
             if (idesque.equals("True")) return new Token(TokenType.BOOLEAN, true);
@@ -144,7 +144,7 @@ public class Lexer {
         table_f[State.S_FLOAT.ordinal()][Typechar.TC_RPAREN.ordinal()] = State.SFINAL_FLOAT;
         table_f[State.S_FLOAT.ordinal()][Typechar.TC_DOT.ordinal()] = State.S_FLOAT;
         table_f[State.S_FLOAT.ordinal()][Typechar.TC_HYPHEN.ordinal()] = State.SFINAL_FLOAT;
-        table_f[State.S_FLOAT.ordinal()][Typechar.TC_DIGIT.ordinal()] = State.SFINAL_FLOAT;
+        table_f[State.S_FLOAT.ordinal()][Typechar.TC_DIGIT.ordinal()] = State.S_FLOAT;
         table_f[State.S_FLOAT.ordinal()][Typechar.TC_IDSTART.ordinal()] = State.SFINAL_FLOAT;
         table_f[State.S_FLOAT.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_FLOAT;
 
@@ -158,7 +158,11 @@ public class Lexer {
         table_f[State.S_ID.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ID;
     }
     public Token next_token() throws IOException {
-        if (Character.getNumericValue(current_char) == -1) return new Token(TokenType.EOF);
+        //System.out.println((short)current_char);
+        while (Character.isWhitespace(current_char)) {
+            current_char = (char)reader.read();
+        }
+        if ((short)current_char < 32) return new Token(TokenType.EOF);
         current_state = State.S_INITIAL;
         return lex_token();
     }

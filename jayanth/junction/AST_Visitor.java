@@ -1,3 +1,5 @@
+package jayanth.junction;
+
 public interface AST_Visitor {
     void visit(CallNode node);
     void visit(DefNode node);

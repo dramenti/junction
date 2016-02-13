@@ -29,15 +29,19 @@ public class Token {
         value.v_bool = b;
     }
 
-    public Semantic get_value() {
+    public Semantic getValue() {
         return value;
+    }
+
+    public TokenType getTokenType() {
+        return type;
     }
 
     public String toString() {
         String strtype = "Invalid, ";
-        String strsemantic = "no semantics";
+        String strsemantic = "";
         switch(type) {
-            case ID: strtype = "Token type: ID, "; break;
+            case EOF: strtype = "Token type: EOF, "; break;
             case DEF: strtype = "Token type: DEF, "; break;
             case IF: strtype = "Token type: IF, "; break;
             case LAMBDA: strtype = "Token type: LAMBDA, "; break;
@@ -45,6 +49,9 @@ public class Token {
             case AND: strtype = "Token type: AND, "; break;
             case LPAREN: strtype = "Token type: LPAREN, "; break;
             case RPAREN: strtype = "Token type: RPAREN, "; break;
+            case ID:        strtype = "Token type: ID, ";
+                            strsemantic = value.v_string;
+                            break;
             case INTEGER:   strtype = "Token type: INTEGER, "; 
                             strsemantic = Integer.toString(value.v_int);
                             break;
