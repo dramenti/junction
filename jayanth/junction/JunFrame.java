@@ -1,9 +1,17 @@
 package jayanth.junction;
 import java.util.Map;
+import java.util.HashMap;
 
 public class JunFrame {
     private JunFrame parent; //null for global
+    private String name;
     private Map<String, JunObject> symbol_table;
+
+    public JunFrame(JunFrame parent, String name) {
+        this.parent = parent;
+        this.name = name;
+        this.symbol_table = new HashMap<String, JunObject>();
+    }
 
     public boolean isGlobal() {
         return parent == null;
@@ -14,6 +22,9 @@ public class JunFrame {
     }
     public JunFrame getParent() {
         return parent;
+    }
+    public String getName() {
+        return name;
     }
 
     public void add(String name, JunObject value) {

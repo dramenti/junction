@@ -1,12 +1,14 @@
 package jayanth.junction;
 
 public interface AST_Visitor {
-    void visit(CallNode node);
-    void visit(DefNode node);
-    void visit(LambdaNode node);
-    void visit(BooleanNode node);
-    void visit(IdentifierNode node);
-    void visit(StringNode node);
-    void visit(FloatNode node);
-    void visit(IntNode node);
+    JunObject visit(CallNode node, JunFrame frame);
+    JunObject visit(DefNode node, JunFrame frame);
+    JunObject visit(LambdaNode node, JunFrame frame);
+    JunObject visit(BooleanNode node, JunFrame frame);
+    JunObject visit(IdentifierNode node, JunFrame frame);
+    JunObject visit(StringNode node, JunFrame frame);
+    JunObject visit(FloatNode node, JunFrame frame);
+    JunObject visit(IntNode node, JunFrame frame);
+    JunObject visit(AndNode node, JunFrame frame);
+    JunObject visit(OrNode node, JunFrame frame);
 }

@@ -2,13 +2,13 @@ package jayanth.junction;
 
 public class AST_Evaluator implements AST_Visitor {
 
-    JunObject visit(CallNode node, JunFrame frame) {
+    public JunObject visit(CallNode node, JunFrame frame) {
         //evaluate the caller expression
-        Function function = node.caller().accept(this, frame);
+        Function function = node.caller().accept(this, frame).getFunctionValue();
         //get # of args for function
         //for each arg of the function, get the JunObject of the node's
         //next one
-        JunFrame next_frame = new JunFrame(function.getParentFrame()); 
+        JunFrame next_frame = new JunFrame(function.getParentFrame(), function.getIntrinsic()); 
 
         //bind formal parameters in new frame
         for (int i = 0; i < function.getArgCount(); i++) {
@@ -21,23 +21,46 @@ public class AST_Evaluator implements AST_Visitor {
         //now just execute the function within the frame
         return function.getBodyNode().accept(this, next_frame);
     }
-    JunObject visit(DefNode node, JunFrame frame) {
+    public JunObject visit(DefNode node, JunFrame frame) {
         Function function = new Function(node.getFunctionName(), node.getFormals(), frame, node.getBodyNode());
         frame.add(new String(node.getFunctionName()), function);
         return function;
     }
-    JunObject visit(LambdaNode node, JunFrame frame) {
+    public JunObject visit(LambdaNode node, JunFrame frame) {
         //do the same thing as a DefNode, except
-        Function lambda = new Function("Lambda", node.getFormals(), frame, node.getBodyNode());
-        return lambda;
+        return new Function(".lambda", node.getFormals(), frame, node.getBodyNode());
     }
-    JunObject visit(BooleanNode node, JunFrame frame);
-    JunObject visit(IdentifierNode node, JunFrame frame) {
+    public JunObject visit(AndNode node, JunFrame frame) {
+        boolean result = false;
+        JunObject a = node.firstExpression().accept(this, frame);
+        if (a.isTruthy()) {
+            JunObject b = node.secondExpression().accept(this, frame);
+            if (b.isTruthy()) result = true;
+        }
+        return new BooleanObject(result);
+    }
+    public JunObject visit(OrNode node, JunFrame frame) {
+        boolean result = true;
+        JunObject a = node.firstExpression().accept(this, frame);
+        if (!a.isTruthy()) {
+            JunObject b = node.secondExpression().accept(this, frame);
+            if (!b.isTruthy()) result = false;
+        }
+        return new BooleanObject(result);
+    }
+    public JunObject visit(BooleanNode node, JunFrame frame) {
+        return new BooleanObject(node.getValue());
+    }
+    public JunObject visit(IdentifierNode node, JunFrame frame) {
         return frame.getValueInCurrentEnvironment(node.getName());
     }
-    JunObject visit(StringNode node, JunFrame frame) {
+    public JunObject visit(StringNode node, JunFrame frame) {
         return new StringObject(node.getValue());
     }
-    JunObject visit(FloatNode node, JunFrame frame);
-    JunObject visit(IntNode node, JunFrame frame);
+    public JunObject visit(FloatNode node, JunFrame frame) {
+        return new FloatObject(node.getValue());
+    }
+    public JunObject visit(IntNode node, JunFrame frame) {
+        return new IntObject(node.getValue());
+    }
 }

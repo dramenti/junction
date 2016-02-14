@@ -76,7 +76,7 @@ public class Lexer {
         if (c == '-') return Typechar.TC_HYPHEN;
         if (Character.isDigit(c)) return Typechar.TC_DIGIT;
         if (Character.isLetter(c)) return Typechar.TC_IDSTART;
-        if (c == '+' || c == '-' || c == '*' || c == '/') return Typechar.TC_IDSTART;
+        if (c == '=' || c == '$' || c == '+' || c == '-' || c == '*' || c == '/') return Typechar.TC_IDSTART;
         return Typechar.TC_OTHER;
     }
     private enum State {
