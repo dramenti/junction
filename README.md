@@ -1,18 +1,18 @@
+#Junction
+
+###Overview
 This is Junction, a functional programming language implemented in Java. 
 The name is either a portmanteau of Java+Function, or Jayanth+Function. Or both.
 
-Current functionality:
 
--Basic runtime environment
+###Current status
+* Basic runtime environment
+* Lexical analyzer
 
--Lexical analyzer
+###To do
+Parser 
 
-Todo:
+###Source description
+* jayanth/junction contains the source .java files
 
--Parser 
-
-Notes on organization:
-
--jayanth/junction contains the source .java files
-
--bin contains the compiled .class files
+* bin contains the compiled .class files
