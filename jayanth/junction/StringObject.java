@@ -45,4 +45,7 @@ public class StringObject implements JunObject {
     public int compare(JunObject j) {
         return getValue().compareTo(j.getStringValue().getValue());
     }
+    public String toString() {
+        return getValue();
+    }
 }

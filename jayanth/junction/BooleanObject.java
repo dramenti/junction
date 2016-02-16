@@ -46,4 +46,7 @@ public class BooleanObject implements JunObject {
     public int compare(JunObject j) {
         return (isTruthy() == j.isTruthy()) ? 0 : -1;
     }
+    public String toString() {
+        return getValue() ? "True" : "False" ;
+    }
 }

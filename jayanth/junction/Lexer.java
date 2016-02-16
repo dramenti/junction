@@ -157,7 +157,7 @@ public class Lexer {
         table_f[State.S_ID.ordinal()][Typechar.TC_IDSTART.ordinal()] = State.S_ID;
         table_f[State.S_ID.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ID;
     }
-    public Token next_token() throws IOException {
+    public Token nextToken() throws IOException {
         //System.out.println((short)current_char);
         while (Character.isWhitespace(current_char)) {
             current_char = (char)reader.read();

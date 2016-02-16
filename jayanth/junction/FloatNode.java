@@ -3,6 +3,10 @@ package jayanth.junction;
 public class FloatNode implements AST_Node {
     private double value;
 
+    public FloatNode(double value) {
+        this.value = value;
+    }
+
     public JunObject accept(AST_Visitor visitor, JunFrame frame) {
         return visitor.visit(this, frame);
     }

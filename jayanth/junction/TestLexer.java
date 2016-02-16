@@ -7,7 +7,7 @@ public class TestLexer {
         Lexer lexer = new Lexer(new FileReader(args[0])); 
         Token t;
         do {
-            t = lexer.next_token();
+            t = lexer.nextToken();
             System.out.println(t);
         } while (t.getTokenType() != TokenType.EOF);
     }

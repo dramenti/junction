@@ -58,4 +58,7 @@ public class IntObject implements JunObject {
     public int compare(JunObject j) {
         return getValue() - j.getIntValue().getValue();
     }
+    public String toString() {
+        return Integer.toString(getValue());
+    }
 }

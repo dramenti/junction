@@ -9,10 +9,12 @@ public class AST_Evaluator implements AST_Visitor {
         if (function.isBuiltin() ) {
             //do stuff
             int argcount = node.getArgumentNodesLength();
+            //System.out.println(argcount);
             JunObject[] params = new JunObject[argcount];
             for (int i = 0; i < argcount; i++) {
                 AST_Node arg = node.getIthArgumentNode(i);
                 params[i] = arg.accept(this, frame);
+                //System.out.println(params[i]);
             }
             return function.builtin(params);
         }

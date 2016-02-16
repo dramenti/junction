@@ -2,7 +2,7 @@ package jayanth.junction;
 
 public class Builtins {
 
-    public class Add extends Function {
+    public static class Add extends Function {
         public JunObject builtin(JunObject[] args) {
             JunObject result = args[0];
             for (int i = 1; i < args.length; i++) {
@@ -15,7 +15,7 @@ public class Builtins {
         }
     }
 
-    public class Sub extends Function {
+    public static class Sub extends Function {
         public JunObject builtin(JunObject[] args) {
             JunObject result = args[0];
             for (int i = 1; i < args.length; i++) {
@@ -27,7 +27,7 @@ public class Builtins {
             return true;
         }
     }
-    public class Mul extends Function {
+    public static class Mul extends Function {
         public JunObject builtin(JunObject[] args) {
             JunObject result = args[0];
             for (int i = 1; i < args.length; i++) {
@@ -39,7 +39,7 @@ public class Builtins {
             return true;
         }
     }
-    public class Div extends Function {
+    public static class Div extends Function {
         public JunObject builtin(JunObject[] args) {
             JunObject result = args[0];
             for (int i = 1; i < args.length; i++) {
@@ -51,7 +51,7 @@ public class Builtins {
             return true;
         }
     }
-    public class Mod extends Function {
+    public static class Mod extends Function {
         public JunObject builtin(JunObject[] args) {
             //ensure args.length == 2
             JunObject n = args[0];
@@ -62,7 +62,7 @@ public class Builtins {
             return true;
         }
     }
-    public class Equals extends Function {
+    public static class Equals extends Function {
         public JunObject builtin(JunObject[] args) {
             //ensure args.length == 2
             return new BooleanObject(args[0].compare(args[1]) == 0);
@@ -71,7 +71,7 @@ public class Builtins {
             return true;
         }
     }
-    public class LessThan extends Function {
+    public static class LessThan extends Function {
         public JunObject builtin(JunObject[] args) {
             //ensure args.length == 2
             return new BooleanObject(args[0].compare(args[1]) < 0);
@@ -80,7 +80,7 @@ public class Builtins {
             return true;
         }
     }
-    public class GreaterThan extends Function {
+    public static class GreaterThan extends Function {
         public JunObject builtin(JunObject[] args) {
             //ensure args.length == 2
             return new BooleanObject(args[0].compare(args[1]) > 0);
