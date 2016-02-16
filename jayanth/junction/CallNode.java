@@ -12,4 +12,7 @@ public class CallNode implements AST_Node {
     public AST_Node getIthArgumentNode(int i) {
         return args[i];
     }
+    public int getArgumentNodesLength() {
+        return args.length;
+    }
 }

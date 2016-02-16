@@ -5,6 +5,17 @@ public class AST_Evaluator implements AST_Visitor {
     public JunObject visit(CallNode node, JunFrame frame) {
         //evaluate the caller expression
         Function function = node.caller().accept(this, frame).getFunctionValue();
+        //check if function is builtin:
+        if (function.isBuiltin() ) {
+            //do stuff
+            int argcount = node.getArgumentNodesLength();
+            JunObject[] params = new JunObject[argcount];
+            for (int i = 0; i < argcount; i++) {
+                AST_Node arg = node.getIthArgumentNode(i);
+                params[i] = arg.accept(this, frame);
+            }
+            return function.builtin(params);
+        }
         //get # of args for function
         //for each arg of the function, get the JunObject of the node's
         //next one
