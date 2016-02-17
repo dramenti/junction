@@ -10,6 +10,11 @@ at least as of now. Functions are first class objects, and can be passed as para
 Also, there is lexical closure - functions can be defined inside other functions, and their
 'parent frame' is the frame in which they were defined.
 
+###Example Code
+An example of lambdas (the actual lambda symbol 'λ' is supported!)
+    ((def (f g) (+ (g 10) 4) ) (λ (u) (* (+ u 1) u)))
+This evaluates to (10+1)\*(10) + 4 = 114
+
 ###Current status
 * Basic runtime environment
 * Lexical analyzer
