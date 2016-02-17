@@ -13,9 +13,7 @@ public class Function implements JunObject {
         this.body = body;
     }
 
-    public Function() {
-        this.intrinsic = "builtin";
-    }
+    public Function() {}
 
     public boolean isTruthy() {
         return true;
@@ -81,6 +79,7 @@ public class Function implements JunObject {
         return intrinsic;
     }
     public String toString() {
+        if (getIntrinsic() == null) return "<builtin>";
         return "<function " + getIntrinsic() + " : scope "+ getParentFrame().getName() + ">";
     }
 }
