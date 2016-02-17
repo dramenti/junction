@@ -12,7 +12,10 @@ public class Function implements JunObject {
         this.parent = parent;
         this.body = body;
     }
-    public Function() {}
+
+    public Function() {
+        this.intrinsic = "builtin";
+    }
 
     public boolean isTruthy() {
         return true;
