@@ -43,6 +43,29 @@ public class Parser {
         return null;
     }
 
+    private AST_Node parseLambda() throws IOException {
+        //currently at lambda
+        //next should be a (
+        token = lexer.nextToken();
+        if (!expect(TokenType.LPAREN)) return null;
+
+        //currently at '('
+        //next should be identifiers (params)
+        LinkedList<String> formals = new LinkedList<String>();
+
+        token = lexer.nextToken();
+        while (token.getTokenType() != TokenType.RPAREN) {
+            if (!expect( TokenType.ID)) return null;
+            formals.add(token.getValue().v_string);
+            token = lexer.nextToken();
+        }
+        token = lexer.nextToken();
+        AST_Node value = parseExpression();
+        if (value == null) return null; //error
+        if (!expect(TokenType.RPAREN)) return null;
+        token = lexer.nextToken();
+        return new LambdaNode(formals.toArray(new String[formals.size()]), value);
+    }
     private AST_Node parseDefine() throws IOException{
         //currently at def
         //next should be a (
@@ -98,6 +121,7 @@ public class Parser {
         //or a function call
         switch(token.getTokenType()) {
             case DEF: return parseDefine();
+            case LAMBDA: return parseLambda();
             case IF: return parseIf();
             default: return parseCall(); //if it isn't a special form, it's call 
         }
