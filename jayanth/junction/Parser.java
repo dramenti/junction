@@ -34,6 +34,7 @@ public class Parser {
             case FLOAT: return new FloatNode(token.getValue().v_float);
             case INTEGER: return new IntNode(token.getValue().v_int);
             case STRING: return new StringNode(token.getValue().v_string);
+            case BOOLEAN: return new BooleanNode(token.getValue().v_bool);
             default: parseErr("Unrecognized token when parsing terminal"); return null;
         }
     }
