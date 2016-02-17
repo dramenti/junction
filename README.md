@@ -12,7 +12,9 @@ Also, there is lexical closure - functions can be defined inside other functions
 
 ###Example Code
 An example of lambdas (the actual lambda symbol 'λ' is supported!)
+
     ((def (f g) (+ (g 10) 4) ) (λ (u) (* (+ u 1) u)))
+
 This evaluates to (10+1)\*(10) + 4 = 114
 
 ###Current status
