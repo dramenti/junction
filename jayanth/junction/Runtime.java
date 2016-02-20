@@ -9,8 +9,7 @@ public class Runtime {
     AST_Evaluator evaluator;
     JunFrame global;
 
-    public Runtime(Reader in) throws IOException {
-       // parser = new Parser(in);
+    public Runtime() {
         evaluator = new AST_Evaluator();
         global = new JunFrame(null, "Global"); //global frame
         global.add("+", new Builtins.Add());
@@ -22,10 +21,33 @@ public class Runtime {
         global.add("<", new Builtins.LessThan());
     }
 
-    public void repl() throws IOException {
-        Scanner s = new Scanner(System.in); 
+    public void repl2() throws IOException {
+        StringReader reader;
+        AST_Node node;
+        JunObject result;
+        Scanner s = new Scanner(System.in);
         System.out.print(">>> ");
+        while (s.hasNextLine()) {
+            reader = new StringReader(s.nextLine());
+            parser = new Parser(reader);
+            try {
+                node = parser.parse();
+                if (node != null) {
+                    result = node.accept(evaluator, global);
+                    System.out.println(result);
+                }
+            } catch (JunctionParserException e) {
+                System.err.println("JunctionParserException while parsing in REPL: " + e.getMessage());
+            }
+            System.out.print(">>> ");
+        }
+        System.out.println();
+    }
+
+    /*public void repl() throws IOException {
+        Scanner s = new Scanner(System.in); 
         StringReader strReader = new StringReader(s.nextLine());
+        System.out.print(">>> ");
         parser = new Parser(strReader);
         AST_Node node = parser.parse();
         while (node != null) {
@@ -37,6 +59,6 @@ public class Runtime {
             parser = new Parser(strReader);
             node = parser.parse();
         } 
-    }
+    } */
     
 }

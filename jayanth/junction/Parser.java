@@ -12,43 +12,39 @@ public class Parser {
         token = lexer.nextToken();
     }
 
-    public AST_Node parse() throws IOException {
+    public AST_Node parse() throws IOException, JunctionParserException {
         return parseExpression();
-    }
-
-    private void parseErr(String message) {
-        System.out.println(message);
     }
 
     private boolean expect(TokenType type) {
         if (token.getTokenType() != type) {
-            System.out.println("Error: unexpected token");
+            //System.out.println("Error: unexpected token");
             return false;
         }
         return true;
     }
 
-    private AST_Node parseTerminal() {
+    private AST_Node parseTerminal() throws JunctionParserException {
         switch(token.getTokenType()) {
             case ID: return new IdentifierNode(token.getValue().v_string);
             case FLOAT: return new FloatNode(token.getValue().v_float);
             case INTEGER: return new IntNode(token.getValue().v_int);
             case STRING: return new StringNode(token.getValue().v_string);
             case BOOLEAN: return new BooleanNode(token.getValue().v_bool);
-            default: parseErr("Unrecognized token when parsing terminal"); return null;
+            default: throw new JunctionParserException("Unrecognized terminal: " + token);
         }
     }
 
-    private AST_Node parseIf() throws IOException{
+    private AST_Node parseIf() throws IOException, JunctionParserException {
         //TODO: implement!
         return null;
     }
 
-    private AST_Node parseLambda() throws IOException {
+    private AST_Node parseLambda() throws IOException, JunctionParserException {
         //currently at lambda
         //next should be a (
         token = lexer.nextToken();
-        if (!expect(TokenType.LPAREN)) return null;
+        if (!expect(TokenType.LPAREN)) throw new JunctionParserException("Expected '(' after lambda");
 
         //currently at '('
         //next should be identifiers (params)
@@ -56,33 +52,32 @@ public class Parser {
 
         token = lexer.nextToken();
         while (token.getTokenType() != TokenType.RPAREN) {
-            if (!expect( TokenType.ID)) return null;
+            if (!expect(TokenType.ID)) throw new JunctionParserException("Expected identifier as formal parameter");
             formals.add(token.getValue().v_string);
             token = lexer.nextToken();
         }
         token = lexer.nextToken();
         AST_Node value = parseExpression();
-        if (value == null) return null; //error
-        if (!expect(TokenType.RPAREN)) return null;
+        if (!expect(TokenType.RPAREN)) throw new JunctionParserException("Expected ')' at end of function definition");
         token = lexer.nextToken();
         return new LambdaNode(formals.toArray(new String[formals.size()]), value);
     }
-    private AST_Node parseDefine() throws IOException{
+    private AST_Node parseDefine() throws IOException, JunctionParserException {
         //currently at def
         //next should be a (
         token = lexer.nextToken();
-        if (!expect(TokenType.LPAREN)) return null;
+        if (!expect(TokenType.LPAREN)) throw new JunctionParserException("Expected '(' after def");
         
         //currently at '('
         //next should be identifier
         token = lexer.nextToken(); 
-        if (!expect( TokenType.ID)) return null;
+        if (!expect( TokenType.ID)) throw new JunctionParserException("Expected identifier after '(' in function definition");
         String name = token.getValue().v_string;
         LinkedList<String> formals = new LinkedList<String>();
 
         token = lexer.nextToken();
         while (token.getTokenType() != TokenType.RPAREN) {
-            if (!expect( TokenType.ID)) return null;
+            if (!expect(TokenType.ID)) throw new JunctionParserException("Expected identifier as formal parameter");
             formals.add(token.getValue().v_string);
             token = lexer.nextToken();
         }
@@ -91,13 +86,12 @@ public class Parser {
 
         //parse function return value
         AST_Node value = parseExpression();
-        if (value == null) return null; //error
-        if (!expect(TokenType.RPAREN)) return null;
+        if (!expect(TokenType.RPAREN)) throw new JunctionParserException("Expected ')' at end of function definition");
         token = lexer.nextToken();
         return new DefNode(name, formals.toArray(new String[formals.size()]), value);
     }
 
-    private AST_Node parseCall() throws IOException{
+    private AST_Node parseCall() throws IOException, JunctionParserException {
         //lexer currently at something (identifier, or perhaps another call)
         //note that it doesn't have to be an identifier
         //the language supports expressions that evaluate to a function,
@@ -107,7 +101,6 @@ public class Parser {
         LinkedList<AST_Node> args = new LinkedList<AST_Node>();
         while (token.getTokenType() != TokenType.RPAREN) {
             AST_Node arg = parseExpression();
-            if (arg == null) return null; //error checking?
             args.add(arg);
         }
         //currently at RPAREN
@@ -115,7 +108,7 @@ public class Parser {
         //System.out.println("Parsed call");
         return new CallNode(caller, args.toArray(new AST_Node[args.size()]));
     }
-    private AST_Node parseCombination() throws IOException{
+    private AST_Node parseCombination() throws IOException, JunctionParserException {
         //currently at '('
         token = lexer.nextToken();
         //could either be a special form
@@ -128,7 +121,7 @@ public class Parser {
         }
     }
 
-    private AST_Node parseExpression() throws IOException {
+    private AST_Node parseExpression() throws IOException, JunctionParserException {
         if (token.getTokenType() == TokenType.LPAREN) return parseCombination();
         if (token.getTokenType() == TokenType.EOF) return null;
         AST_Node terminal = parseTerminal();
