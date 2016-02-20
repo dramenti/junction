@@ -15,7 +15,8 @@ public class Runtime {
         global.add("+", new Builtins.Add());
         global.add("-", new Builtins.Sub());
         global.add("*", new Builtins.Mul());
-        global.add("/", new Builtins.Mul());
+        global.add("/", new Builtins.Div());
+        global.add("%", new Builtins.Mod());
         global.add("=", new Builtins.Equals());
         global.add(">", new Builtins.GreaterThan());
         global.add("<", new Builtins.LessThan());
