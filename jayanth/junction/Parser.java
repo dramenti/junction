@@ -36,8 +36,14 @@ public class Parser {
     }
 
     private AST_Node parseIf() throws IOException, JunctionParserException {
-        //TODO: implement!
-        return null;
+        //currently at if
+        //advance lexer
+        token = lexer.nextToken();
+        AST_Node condition = parseExpression();
+        AST_Node body1 = parseExpression();
+        AST_Node body2 = parseExpression();
+        if (!expect(TokenType.RPAREN)) throw new JunctionParserException("Expected closing ')' for if statement");
+        return new IfNode(condition, body1, body2);
     }
 
     private AST_Node parseLambda() throws IOException, JunctionParserException {

@@ -11,4 +11,5 @@ public interface AST_Visitor {
     JunObject visit(IntNode node, JunFrame frame);
     JunObject visit(AndNode node, JunFrame frame);
     JunObject visit(OrNode node, JunFrame frame);
+    JunObject visit(IfNode node, JunFrame frame);
 }
