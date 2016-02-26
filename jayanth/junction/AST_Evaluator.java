@@ -62,7 +62,7 @@ public class AST_Evaluator implements AST_Visitor {
         return new BooleanObject(result);
     }
     public JunObject visit(IfNode node, JunFrame frame) {
-        JunObect condition = node.getCondition().accept(this, frame);
+        JunObject condition = node.getCondition().accept(this, frame);
         if (condition.isTruthy()) {
             return node.getBody1().accept(this, frame);
         }
