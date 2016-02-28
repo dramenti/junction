@@ -129,7 +129,7 @@ public class Parser {
 
     private AST_Node parseExpression() throws IOException, JunctionParserException {
         if (token.getTokenType() == TokenType.LPAREN) return parseCombination();
-        if (token.getTokenType() == TokenType.EOF) return null;
+        if (token.getTokenType() == TokenType.EOF) throw new JunctionParserException("Reached end of file while parsing");
         AST_Node terminal = parseTerminal();
         token = lexer.nextToken();
         return terminal;
