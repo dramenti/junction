@@ -7,6 +7,7 @@ public interface JunObject {
     IntObject getIntValue();
     FloatObject getFloatValue();
     StringObject getStringValue();
+    JunObject get(int i);
     JunObject add(JunObject j);
     JunObject sub(JunObject j);
     JunObject mul(JunObject j);

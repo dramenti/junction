@@ -27,6 +27,9 @@ public class StringObject implements JunObject {
         //throw an error
         return null;
     }
+    public JunObject get(int i) {
+        return new StringObject(getValue().substring(i, i+1));
+    }
     public JunObject add(JunObject j) {
         return null;
     }

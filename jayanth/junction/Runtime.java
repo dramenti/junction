@@ -12,6 +12,8 @@ public class Runtime {
     public Runtime() {
         evaluator = new AST_Evaluator();
         global = new JunFrame(null, "Global"); //global frame
+        global.add("list", new Builtins.List());
+        global.add("get", new Builtins.Get());
         global.add("+", new Builtins.Add());
         global.add("-", new Builtins.Sub());
         global.add("*", new Builtins.Mul());

@@ -40,6 +40,9 @@ public class Function implements JunObject {
         //error: cannot get String from function
         return null;
     }
+    public JunObject get(int i) {
+        return null;
+    }
     public JunObject add(JunObject j) {
         //error: cannot add functions
         return null;

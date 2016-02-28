@@ -2,6 +2,28 @@ package jayanth.junction;
 
 public class Builtins {
 
+    public static class Get extends Function {
+        public JunObject builtin(JunObject[] args) {
+            //ensure args.length == 2
+            int index = args[0].getIntValue().getValue();
+            return args[1].get(index);
+        }
+        public boolean isBuiltin() {
+            return true;
+        }
+    }
+    public static class List extends Function {
+        public JunObject builtin(JunObject[] args) {
+            JunObject[] list_elements = new JunObject[args.length]; 
+            for (int i = 0; i < args.length; i++) {
+                list_elements[i] = args[i];
+            }
+            return new ListObject(list_elements);
+        }
+        public boolean isBuiltin() {
+            return true;
+        }
+    }
     public static class Add extends Function {
         public JunObject builtin(JunObject[] args) {
             JunObject result = args[0];

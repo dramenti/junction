@@ -26,6 +26,9 @@ public class BooleanObject implements JunObject {
         //error: cannot get string
         return null;
     }
+    public JunObject get(int i) {
+        return null;
+    }
 
     //todo: add support for arithmetic on booleans
     public JunObject add(JunObject j) {

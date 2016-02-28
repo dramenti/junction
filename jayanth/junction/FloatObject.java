@@ -27,6 +27,9 @@ public class FloatObject implements JunObject {
         //error: not a function
         return null;
     }
+    public JunObject get(int i) {
+        return null;
+    }
     public JunObject add(JunObject j) {
         return new FloatObject(getValue() + j.getFloatValue().getValue());
     }

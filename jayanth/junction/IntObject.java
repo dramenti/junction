@@ -26,6 +26,9 @@ public class IntObject implements JunObject {
         //error: not castable to String!
         return null;
     }
+    public JunObject get(int i) {
+        return null;
+    }
     public JunObject add(JunObject j) {
         //maybe refactor later to avoid using instanceof
         //though maybe in this special case it is justified 
