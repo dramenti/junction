@@ -17,6 +17,12 @@ An example of lambdas (the actual lambda symbol 'λ' is supported!)
 
 This evaluates to (10+1)\*(10) + 4 = 114
 
+Lists are now a thing
+
+    (get 3 (list 1 2 3 4 1000)) 
+
+The `list` function constructs a new list, and `get` retrieves the value at the ith index. Thus, the above line would evaluate to 4.
+
 ###Current status
 * Basic runtime environment
 * Lexical analyzer
