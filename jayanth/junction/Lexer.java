@@ -8,7 +8,7 @@ public class Lexer {
     private char current_char;
     private State current_state;
     private StringBuilder current_token;
-    private State[][] table_f; //refactor as EnumMap later
+    private State[][] table_f; //TODO: refactor as EnumMap later
 
     private State transition(Typechar c) {
         return table_f[current_state.ordinal()][c.ordinal()];
@@ -85,6 +85,7 @@ public class Lexer {
         S_NUMERIC,
         S_FLOAT,
         S_ID,
+        S_HYPHEN,
         SFINAL,
         SFINAL_LPAREN,
         SFINAL_RPAREN,
@@ -108,7 +109,8 @@ public class Lexer {
         reader = new BufferedReader(in);
         current_char = (char)reader.read();
         //initialize the table for FSM
-        final int ROWS = 5;
+        //TODO: refactor with static initializer
+        final int ROWS = State.SFINAL.ordinal();
         final int COLS = Typechar.values().length;
         table_f = new State[ROWS][COLS];
         //initialize the FSM itself
@@ -116,7 +118,7 @@ public class Lexer {
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_LPAREN.ordinal()] = State.SFINAL_LPAREN;
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_RPAREN.ordinal()] = State.SFINAL_RPAREN;
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_DOT.ordinal()] = State.S_FLOAT;
-        table_f[State.S_INITIAL.ordinal()][Typechar.TC_HYPHEN.ordinal()] = State.S_NUMERIC;
+        table_f[State.S_INITIAL.ordinal()][Typechar.TC_HYPHEN.ordinal()] = State.S_HYPHEN;
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_DIGIT.ordinal()] = State.S_NUMERIC;
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_IDSTART.ordinal()] = State.S_ID;
         table_f[State.S_INITIAL.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ERROR;
@@ -156,6 +158,16 @@ public class Lexer {
         table_f[State.S_ID.ordinal()][Typechar.TC_DIGIT.ordinal()] = State.S_ID;
         table_f[State.S_ID.ordinal()][Typechar.TC_IDSTART.ordinal()] = State.S_ID;
         table_f[State.S_ID.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ID;
+
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_QUOTE.ordinal()] = State.SFINAL_ID;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_LPAREN.ordinal()] = State.SFINAL_ID;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_RPAREN.ordinal()] = State.SFINAL_ID;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_DOT.ordinal()] = State.S_FLOAT;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_HYPHEN.ordinal()] = State.S_ID;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_DIGIT.ordinal()] = State.S_NUMERIC;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_IDSTART.ordinal()] = State.S_ID;
+        table_f[State.S_HYPHEN.ordinal()][Typechar.TC_OTHER.ordinal()] = State.SFINAL_ID;
+
     }
     public Token nextToken() throws IOException {
         //System.out.println((short)current_char);
