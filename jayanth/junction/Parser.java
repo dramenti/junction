@@ -68,6 +68,46 @@ public class Parser {
         token = lexer.nextToken();
         return new LambdaNode(formals.toArray(new String[formals.size()]), value);
     }
+    private AST_Node parseIter() throws IOException, JunctionParserException {
+        //currently at iter
+        //next should be a (
+        token = lexer.nextToken();
+        if (!expect(TokenType.LPAREN)) throw new JunctionParserException("Expected '(' after iter");
+
+        //currently at '('
+        //next should be identifier
+        token = lexer.nextToken(); 
+        if (!expect( TokenType.ID)) throw new JunctionParserException("Expected identifier after '(' in iterative definition");
+        String name = token.getValue().v_string;
+        LinkedList<String> formals = new LinkedList<String>();
+
+        token = lexer.nextToken();
+        while (token.getTokenType() != TokenType.RPAREN) {
+            if (!expect(TokenType.ID)) throw new JunctionParserException("Expected identifier as formal parameter");
+            formals.add(token.getValue().v_string);
+            token = lexer.nextToken();
+        }
+        //done parsing args, advance lexer
+        token = lexer.nextToken();
+
+        //parse condition
+        AST_Node condition = parseExpression();
+        if (!expect(TokenType.LPAREN)) throw new JunctionParserException("Expected '(' after condition in iterative definition");
+
+        LinkedList<AST_Node> rebinds = new LinkedList<AST_Node>();
+        token = lexer.nextToken();
+        while (token.getTokenType() != TokenType.RPAREN) {
+            AST_Node rebind = parseExpression();
+            rebinds.add(rebind);
+        }
+        if (rebinds.size() != formals.size()) throw new JunctionParserException("Argument mismatch, " + rebinds.size() + " passed in but number of formals " + formals.size());
+        token = lexer.nextToken();
+        AST_Node base = parseExpression();
+        if (!expect(TokenType.RPAREN)) throw new JunctionParserException("Expected ')' at end of iterative definition");
+        token = lexer.nextToken();
+        IterBodyNode value = new IterBodyNode(condition, rebinds.toArray(new AST_Node[rebinds.size()]), base);
+        return new DefNode(name, formals.toArray(new String[formals.size()]), value);
+    }
     private AST_Node parseDefine() throws IOException, JunctionParserException {
         //currently at def
         //next should be a (
@@ -121,6 +161,7 @@ public class Parser {
         //or a function call
         switch(token.getTokenType()) {
             case DEF: return parseDefine();
+            case ITER: return parseIter();
             case LAMBDA: return parseLambda();
             case IF: return parseIf();
             default: return parseCall(); //if it isn't a special form, it's call 

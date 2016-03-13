@@ -51,6 +51,7 @@ public class Lexer {
             //deal with special cases
             String idesque = current_token.toString();
             if (idesque.equals("def")) return new Token(TokenType.DEF);
+            if (idesque.equals("iter")) return new Token(TokenType.ITER); 
             if (idesque.equals("if")) return new Token(TokenType.IF);
             if (idesque.equals("lambda") || idesque.equals("λ")) return new Token(TokenType.LAMBDA);
             if (idesque.equals("and")) return new Token(TokenType.AND);

@@ -43,6 +43,7 @@ public class Token {
         switch(type) {
             case EOF: strtype = "Token type: EOF, "; break;
             case DEF: strtype = "Token type: DEF, "; break;
+            case ITER: strtype = "Token type: ITER, "; break;
             case IF: strtype = "Token type: IF, "; break;
             case LAMBDA: strtype = "Token type: LAMBDA, "; break;
             case OR: strtype = "Token type: OR, "; break;

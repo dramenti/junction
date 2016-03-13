@@ -18,10 +18,11 @@ public class AST_Evaluator implements AST_Visitor {
             }
             return function.builtin(params);
         }
+
         //get # of args for function
         //for each arg of the function, get the JunObject of the node's
         //next one
-        JunFrame next_frame = new JunFrame(function.getParentFrame(), function.getIntrinsic()); 
+        JunFrame next_frame = new JunFrame(function.getParentFrame(), function.getIntrinsic(), function); 
 
         //bind formal parameters in new frame
         for (int i = 0; i < function.getArgCount(); i++) {
@@ -29,11 +30,32 @@ public class AST_Evaluator implements AST_Visitor {
             JunObject parameter = arg.accept(this, frame);
             next_frame.add(new String(function.getIthFormal(i)), parameter);
         }
+
         //next_frame is the new frame
         //with formal parameters bound to values
         //now just execute the function within the frame
         return function.getBodyNode().accept(this, next_frame);
     }
+    public JunObject visit(IterBodyNode node, JunFrame frame) {
+        //for each arg in 
+        //evaluate node.condition. While condition not true,
+        //Evaluate each 'rebind' expression, 
+        //then rebind parameters using the same frame
+        //repeat until condition is true, then return:
+        //base case node.accept(this, frame)
+        while(!node.getCondition().accept(this, frame).isTruthy()) {
+            JunFrame next_frame = new JunFrame(frame.getParent(), frame.getName(), frame.getCaller());
+            for (int i = 0; i < frame.getCaller().getArgCount(); i++) {
+                AST_Node arg = node.getIthRebindNode(i);
+                JunObject parameter = arg.accept(this, frame);
+                next_frame.add(frame.getCaller().getIthFormal(i), parameter);
+            }
+            frame = next_frame;
+        }
+
+        return node.getBase().accept(this, frame);
+    }
+
     public JunObject visit(DefNode node, JunFrame frame) {
         Function function = new Function(node.getFunctionName(), node.getFormals(), frame, node.getBodyNode());
         frame.add(new String(node.getFunctionName()), function);

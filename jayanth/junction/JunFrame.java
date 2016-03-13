@@ -5,11 +5,13 @@ import java.util.HashMap;
 public class JunFrame {
     private JunFrame parent; //null for global
     private String name;
+    private Function caller;
     private Map<String, JunObject> symbol_table;
 
-    public JunFrame(JunFrame parent, String name) {
+    public JunFrame(JunFrame parent, String name, Function caller) {
         this.parent = parent;
         this.name = name;
+        this.caller = caller;
         this.symbol_table = new HashMap<String, JunObject>();
     }
 
@@ -19,6 +21,9 @@ public class JunFrame {
 
     public Map<String, JunObject> getSymbolTable() {
         return symbol_table;
+    }
+    public Function getCaller() {
+        return caller;
     }
     public JunFrame getParent() {
         return parent;
