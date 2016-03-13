@@ -29,12 +29,14 @@ Tail call optimization is here, though perhaps in a different guise than in prop
 
     (iter (factorial n i prod) (> i n) (n (+ i 1) (* prod i)) prod)
 
-An `iter` is a special type of function that is designed for iteration. Creating an iterative function: `(iter (name <params>) <until_cond> (<rebinds>) <base>)`
+An `iter` is a special type of function that is designed for iteration. Creating an iterative function: `(iter (name <params>) <until_cond> (<rebinds>) <base>)`. In essence, an `iter` is sort of (in fact, it literally is!) a "while loop" wrapper rather than a "true" tail recursive function. 
 
 ###Current status
 * Basic runtime environment
 * Lexical analyzer
-* Parser (still needs work)
+* Parser
+* Lambdas 
+* Iteration
 
 
 ###Source description
